@@ -1,0 +1,342 @@
+[
+  {
+    "id": "midr_chuvas",
+    "titulo": "Chuvas intensas: saiba como agir",
+    "orgao": "Secretaria Nacional de Proteção e Defesa Civil (MIDR)",
+    "url": "https://www.gov.br/mdr/pt-br/assuntos/protecao-e-defesa-civil/informacoes-uteis/centro-nacional-de-gerenciamento-de-riscos-e-desastres-cenad/chuvasintensas.pdf",
+    "formato": "PDF",
+    "licenca": "CC BY-ND 3.0 (padrão do portal gov.br)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "pdf",
+      "inicio": "Antes",
+      "secoes": [
+        "Antes",
+        "Durante",
+        "Depois"
+      ]
+    }
+  },
+  {
+    "id": "midr_alerta",
+    "titulo": "Defesa Civil Alerta",
+    "orgao": "Ministério da Integração e do Desenvolvimento Regional (MIDR)",
+    "url": "https://www.gov.br/mdr/pt-br/assuntos/protecao-e-defesa-civil/defesa-civil-alerta",
+    "formato": "HTML",
+    "licenca": "CC BY-ND 3.0 (rodapé da página)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "html",
+      "seletor": "#content",
+      "inicio": "Defesa Civil Alerta",
+      "fim": [
+        "Compartilhe",
+        "Tags:",
+        "registrado em:"
+      ],
+      "ignorar": [
+        "Sistema Nacional de Proteção e Defesa Civil - SINDPEC",
+        "Requisitos e Recomendações",
+        "Etapa atual",
+        "Normas",
+        "Perguntas Frequentes",
+        "A Defesa Civil, supervisiona o uso da nova ferramenta em onze pequenos municípios, distribuídos por diferentes regiões do país.",
+        "Conheça a legislação que define procedimentos para o envio de alertas à população e que dispõe sobre transferências de recursos da União a estados e municípios."
+      ]
+    }
+  },
+  {
+    "id": "mma_protocolo",
+    "titulo": "Protocolo de emergência climática: inundações, enchentes e alagamentos",
+    "orgao": "Ministério do Meio Ambiente e Mudança do Clima (MMA)",
+    "url": "https://www.gov.br/mma/pt-br/centrais-de-conteudo/publicacoes/educacao-ambiental/protocolo-inundacoes.pdf",
+    "formato": "PDF",
+    "licenca": "Reprodução sem fins lucrativos permitida, citada a fonte (ficha catalográfica); usada como ficha-resumo porque o PDF é diagramado",
+    "tipo_texto": "ficha"
+  },
+  {
+    "id": "ms_enchentes",
+    "titulo": "Enchentes: cuidados com a saúde",
+    "orgao": "Ministério da Saúde",
+    "url": "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/e/enchentes",
+    "formato": "HTML",
+    "licenca": "CC BY-ND 3.0 (rodapé da página)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "html",
+      "seletor": "#content",
+      "fim": [
+        "Ouvidoria-Geral do SUS",
+        "Mais informações",
+        "Perguntas Frequentes (FAQ)",
+        "Outros eventos climáticos"
+      ],
+      "ignorar": [
+        "Orientações quanto aos cuidados",
+        "Água",
+        "Alimentos",
+        "Leptospirose",
+        "Risco de Tétano",
+        "Animais Peçonhentos"
+      ]
+    }
+  },
+  {
+    "id": "ms_agua",
+    "titulo": "Enchentes: cuidados com a água",
+    "orgao": "Ministério da Saúde",
+    "url": "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/e/enchentes/cuidados-com-a-agua",
+    "formato": "HTML",
+    "licenca": "CC BY-ND 3.0 (rodapé da página)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "html",
+      "seletor": "#content",
+      "fim": [
+        "Ouvidoria-Geral do SUS",
+        "Mais informações",
+        "Perguntas Frequentes (FAQ)",
+        "Outros eventos climáticos"
+      ]
+    }
+  },
+  {
+    "id": "ms_alimentos",
+    "titulo": "Enchentes: cuidados com os alimentos",
+    "orgao": "Ministério da Saúde",
+    "url": "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/e/enchentes/cuidados-com-os-alimentos",
+    "formato": "HTML",
+    "licenca": "CC BY-ND 3.0 (rodapé da página)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "html",
+      "seletor": "#content",
+      "fim": [
+        "Ouvidoria-Geral do SUS",
+        "Mais informações",
+        "Perguntas Frequentes (FAQ)",
+        "Outros eventos climáticos"
+      ]
+    }
+  },
+  {
+    "id": "ms_leptospirose",
+    "titulo": "Enchentes: cuidados com a leptospirose",
+    "orgao": "Ministério da Saúde",
+    "url": "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/e/enchentes/cuidados-com-a-leptospirose",
+    "formato": "HTML",
+    "licenca": "CC BY-ND 3.0 (rodapé da página)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "html",
+      "seletor": "#content",
+      "fim": [
+        "Ouvidoria-Geral do SUS",
+        "Mais informações",
+        "Perguntas Frequentes (FAQ)",
+        "Outros eventos climáticos"
+      ]
+    }
+  },
+  {
+    "id": "ms_tetano",
+    "titulo": "Enchentes: cuidados com o risco de tétano",
+    "orgao": "Ministério da Saúde",
+    "url": "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/e/enchentes/cuidados-com-risco-de-tetano",
+    "formato": "HTML",
+    "licenca": "CC BY-ND 3.0 (rodapé da página)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "html",
+      "seletor": "#content",
+      "fim": [
+        "Ouvidoria-Geral do SUS",
+        "Mais informações",
+        "Perguntas Frequentes (FAQ)",
+        "Outros eventos climáticos"
+      ]
+    }
+  },
+  {
+    "id": "ms_peconhentos",
+    "titulo": "Enchentes: cuidados com animais peçonhentos",
+    "orgao": "Ministério da Saúde",
+    "url": "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/e/enchentes/cuidados-com-animais-peconhentos",
+    "formato": "HTML",
+    "licenca": "CC BY-ND 3.0 (rodapé da página)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "html",
+      "seletor": "#content",
+      "fim": [
+        "Ouvidoria-Geral do SUS",
+        "Mais informações",
+        "Perguntas Frequentes (FAQ)",
+        "Outros eventos climáticos"
+      ]
+    }
+  },
+  {
+    "id": "lei_12608",
+    "titulo": "Lei nº 12.608/2012: Política Nacional de Proteção e Defesa Civil",
+    "orgao": "Presidência da República (Planalto)",
+    "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12608.htm",
+    "formato": "HTML",
+    "licenca": "Ato oficial, sem proteção autoral (Lei 9.610/98, art. 8º, IV)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "lei",
+      "codificacao": "cp1252",
+      "inicio": "Art. 1",
+      "fim": [
+        "Brasília, 10 de abril de 2012"
+      ],
+      "artigos": [
+        1,
+        2,
+        8,
+        9
+      ]
+    }
+  },
+  {
+    "id": "decreto_5113",
+    "titulo": "Decreto nº 5.113/2004: saque do FGTS por desastre natural",
+    "orgao": "Presidência da República (Planalto)",
+    "url": "https://www.planalto.gov.br/ccivil_03/_ato2004-2006/2004/decreto/d5113.htm",
+    "formato": "HTML",
+    "licenca": "Ato oficial, sem proteção autoral (Lei 9.610/98, art. 8º, IV)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "lei",
+      "codificacao": "cp1252",
+      "inicio": "Art. 1",
+      "fim": [
+        "Brasília, 22 de junho de 2004"
+      ]
+    }
+  },
+  {
+    "id": "lei_sp_14493",
+    "titulo": "Lei municipal nº 14.493/2007 (São Paulo): isenção de IPTU para imóveis atingidos por enchentes",
+    "orgao": "Prefeitura de São Paulo (Catálogo de Legislação Municipal)",
+    "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-14493-de-9-de-agosto-de-2007",
+    "formato": "HTML",
+    "licenca": "Ato oficial, sem proteção autoral (Lei 9.610/98, art. 8º, IV)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "lei",
+      "inicio": "Art. 1",
+      "fim": [
+        "PREFEITURA DO MUNICÍPIO DE SÃO PAULO, aos",
+        "Este texto não substitui"
+      ]
+    }
+  },
+  {
+    "id": "decreto_sp_48767",
+    "titulo": "Decreto municipal nº 48.767/2007 (São Paulo): regulamenta a isenção de IPTU por enchente",
+    "orgao": "Prefeitura de São Paulo (Catálogo de Legislação Municipal)",
+    "url": "https://legislacao.prefeitura.sp.gov.br/leis/decreto-48767-de-27-de-setembro-de-2007",
+    "formato": "HTML",
+    "licenca": "Ato oficial, sem proteção autoral (Lei 9.610/98, art. 8º, IV)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "lei",
+      "inicio": "Art. 1",
+      "fim": [
+        "PREFEITURA DO MUNICÍPIO DE SÃO PAULO, aos",
+        "Este texto não substitui"
+      ]
+    }
+  },
+  {
+    "id": "lei_sp_17759",
+    "titulo": "Lei municipal nº 17.759/2022 (São Paulo): altera a isenção de IPTU por enchente",
+    "orgao": "Prefeitura de São Paulo (Catálogo de Legislação Municipal)",
+    "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-17759-de-15-de-marco-de-2022",
+    "formato": "HTML",
+    "licenca": "Ato oficial, sem proteção autoral (Lei 9.610/98, art. 8º, IV)",
+    "tipo_texto": "literal",
+    "extracao": {
+      "tipo": "lei",
+      "inicio": "Art. 1",
+      "fim": [
+        "PREFEITURA DO MUNICÍPIO DE SÃO PAULO, aos",
+        "Este texto não substitui"
+      ]
+    }
+  },
+  {
+    "id": "dcsp_chuvas",
+    "titulo": "Chuvas excessivas: saiba como agir",
+    "orgao": "Defesa Civil da Prefeitura de São Paulo",
+    "url": "https://prefeitura.sp.gov.br/web/defesa_civil/w/cuidados_importantes/179951",
+    "formato": "HTML",
+    "licenca": "Não declarada na página; usada como ficha-resumo com link para o original",
+    "tipo_texto": "ficha"
+  },
+  {
+    "id": "cge_dicas",
+    "titulo": "Dicas para o período de chuvas",
+    "orgao": "CGE - Centro de Gerenciamento de Emergências Climáticas (Prefeitura de São Paulo)",
+    "url": "https://www.cgesp.org/v3/dicas.jsp",
+    "formato": "HTML",
+    "licenca": "Não declarada na página; usada como ficha-resumo com link para o original",
+    "tipo_texto": "ficha"
+  },
+  {
+    "id": "cge_criticidade",
+    "titulo": "Operação Chuvas de Verão e estados de criticidade",
+    "orgao": "CGE - Centro de Gerenciamento de Emergências Climáticas (Prefeitura de São Paulo)",
+    "url": "https://www.cgesp.org/v3/operacao-chuvas-de-verao.jsp",
+    "formato": "HTML",
+    "licenca": "Não declarada na página; usada como ficha-resumo com link para o original",
+    "tipo_texto": "ficha"
+  },
+  {
+    "id": "sp_alerta_sms",
+    "titulo": "SP Sempre Alerta: alertas da Defesa Civil do Estado por SMS (40199)",
+    "orgao": "Defesa Civil do Estado de São Paulo",
+    "url": "https://www.spsemprealerta.sp.gov.br/",
+    "formato": "HTML",
+    "licenca": "Direitos reservados ao Governo do Estado; usada como ficha-resumo com link para o original",
+    "tipo_texto": "ficha"
+  },
+  {
+    "id": "fazenda_iptu",
+    "titulo": "Imóveis afetados por enchentes: benefício fiscal no IPTU",
+    "orgao": "Secretaria Municipal da Fazenda de São Paulo",
+    "url": "https://prefeitura.sp.gov.br/web/fazenda/w/servicos/iptu/4212",
+    "formato": "HTML",
+    "licenca": "Não declarada na página; usada como ficha-resumo com link para o original",
+    "tipo_texto": "ficha"
+  },
+  {
+    "id": "subpref_boca_de_lobo",
+    "titulo": "Manutenção e limpeza de bocas de lobo, galerias e ramais",
+    "orgao": "Prefeitura de São Paulo (Subprefeituras, zeladoria urbana)",
+    "url": "https://prefeitura.sp.gov.br/web/ipiranga/w/zeladoria_urbana/68044",
+    "formato": "HTML",
+    "licenca": "Não declarada na página; usada como ficha-resumo com link para o original",
+    "tipo_texto": "ficha"
+  },
+  {
+    "id": "sehab_cartao",
+    "titulo": "Cartão Emergencial para famílias afetadas por desastres",
+    "orgao": "Secretaria Municipal de Habitação de São Paulo (SEHAB)",
+    "url": "https://prefeitura.sp.gov.br/web/habitacao/w/cartão-emergencial-garante-apoio-imediato-a-famílias-afetadas-por-desastres-naturais",
+    "formato": "HTML",
+    "licenca": "Não declarada na página; usada como ficha-resumo com link para o original",
+    "tipo_texto": "ficha"
+  },
+  {
+    "id": "sms_folder",
+    "titulo": "Cuidados básicos em relação às enchentes (folder)",
+    "orgao": "Secretaria Municipal da Saúde de São Paulo (Coordenadoria de Vigilância em Saúde)",
+    "url": "https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/vigilancia_em_saude/Folder _enchentes versão_2023_V2.pdf",
+    "formato": "PDF",
+    "licenca": "Não declarada no documento; usada como ficha-resumo com link para o original",
+    "tipo_texto": "ficha"
+  }
+]

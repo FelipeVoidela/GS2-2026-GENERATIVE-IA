@@ -1,0 +1,25 @@
+name: testes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Instalar dependências do núcleo
+        run: pip install "numpy>=1.26" "requests>=2.31" "fastapi>=0.110" "pydantic>=2.6" "beautifulsoup4>=4.12" "lxml>=5.1" "pypdf>=4.0" "pytest>=8.0"
+      # Os testes não precisam da LLM: conferem a base, a busca lexical, a LGPD,
+      # as regras de segurança da saída, a verificação do agente e o gabarito.
+      - name: Rodar os testes
+        run: pytest -q

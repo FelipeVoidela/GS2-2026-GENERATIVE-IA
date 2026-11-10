@@ -1,0 +1,19 @@
+# ambiente e segredos
+.venv/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# cópias baixadas das fontes (só os textos tratados e os trechos vão para o Git)
+base/bruto/
+
+# log da API (perguntas dos moradores, mesmo mascaradas, não vão para o repositório)
+logs/
+
+# editores e sistema
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

@@ -1,0 +1,9 @@
+{
+  "limiar": 0.55,
+  "menor_confianca_respondivel": 0.5826,
+  "margem": 0.03,
+  "nao_consta_barradas_na_calibracao": 3,
+  "nao_consta_na_calibracao": 6,
+  "respondiveis_na_calibracao": 14,
+  "calibrado_em": "particao dev (notebook 02_busca_recall_limiar)"
+}

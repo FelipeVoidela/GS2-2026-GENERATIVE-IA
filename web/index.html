@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boca de Lobo · tire sua dúvida sobre alagamento</title>
+  <style>
+    :root {
+      --fundo: #f4f6f8; --cartao: #ffffff; --texto: #14202b; --suave: #4a5b6b;
+      --marca: #0b5cab; --marca-texto: #ffffff; --borda: #c9d3dc;
+      --ok: #0f6b3a; --ok-fundo: #e5f4ea; --recusa: #8a4b00; --recusa-fundo: #fff3df;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0f1720; --cartao: #18232f; --texto: #eef3f7; --suave: #b3c1ce;
+        --marca: #6fb3ff; --marca-texto: #06121e; --borda: #33475a;
+        --ok: #7fe0a6; --ok-fundo: #123222; --recusa: #ffcf87; --recusa-fundo: #3a2a10;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--fundo); color: var(--texto);
+           font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    main { max-width: 760px; margin: 0 auto; padding: 20px 16px 48px; }
+    h1 { font-size: 1.5rem; margin: 8px 0 4px; }
+    p.sub { margin: 0 0 16px; color: var(--suave); }
+    .emergencia { background: var(--recusa-fundo); color: var(--recusa); border: 1px solid var(--borda);
+                  border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; }
+    .emergencia a { color: inherit; font-weight: 700; }
+    form { display: grid; gap: 10px; }
+    label { font-weight: 600; }
+    textarea { width: 100%; min-height: 96px; padding: 12px; font: inherit; color: var(--texto);
+               background: var(--cartao); border: 2px solid var(--borda); border-radius: 10px; resize: vertical; }
+    textarea:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visible {
+      outline: 3px solid var(--marca); outline-offset: 2px; }
+    .linha { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    select { font: inherit; padding: 10px; border-radius: 10px; border: 2px solid var(--borda);
+             background: var(--cartao); color: var(--texto); }
+    button { font: inherit; font-weight: 700; padding: 12px 20px; min-height: 48px; border: 0; border-radius: 10px;
+             background: var(--marca); color: var(--marca-texto); cursor: pointer; }
+    button[disabled] { opacity: .6; cursor: progress; }
+    .exemplos { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 0; padding: 0; list-style: none; }
+    .exemplos button { background: transparent; color: var(--marca); border: 2px solid var(--borda);
+                       font-weight: 600; padding: 8px 12px; min-height: 44px; }
+    #saida { margin-top: 20px; }
+    .cartao { background: var(--cartao); border: 1px solid var(--borda); border-radius: 12px; padding: 16px; margin-top: 14px; }
+    .selo { display: inline-block; font-size: .85rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .selo.ok { background: var(--ok-fundo); color: var(--ok); }
+    .selo.recusa { background: var(--recusa-fundo); color: var(--recusa); }
+    .resposta { font-size: 1.1rem; margin: 10px 0 4px; white-space: pre-wrap; }
+    h2 { font-size: 1.05rem; margin: 16px 0 6px; }
+    ol.fontes { padding-left: 22px; margin: 0; }
+    ol.fontes li { margin-bottom: 10px; }
+    blockquote { margin: 6px 0 0; padding: 6px 12px; border-left: 4px solid var(--borda); color: var(--suave); font-size: .95rem; }
+    details { margin-top: 12px; }
+    summary { cursor: pointer; font-weight: 600; padding: 6px 0; }
+    pre { overflow-x: auto; background: var(--fundo); padding: 10px; border-radius: 8px; font-size: .82rem; }
+    small, .nota { color: var(--suave); font-size: .9rem; }
+    a { color: var(--marca); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Boca de Lobo · tire sua dúvida</h1>
+  <p class="sub">Respostas sobre alagamento tiradas de fontes oficiais, sempre com a fonte. Quando a informação não está nas fontes, o assistente avisa em vez de inventar.</p>
+
+  <div class="emergencia" role="note">
+    Está em perigo agora? Ligue <a href="tel:199">199 (Defesa Civil)</a> ou <a href="tel:193">193 (Bombeiros)</a>. Não espere a resposta daqui.
+  </div>
+
+  <form id="formulario">
+    <label for="pergunta">Sua pergunta</label>
+    <textarea id="pergunta" name="pergunta" maxlength="500" required
+      placeholder="Exemplo: minha rua alagou, o que eu faço com o carro?" aria-describedby="privacidade"></textarea>
+    <small id="privacidade">Não escreva nome, CPF, telefone ou endereço completo. Se escrever, esses dados são apagados antes de a pergunta ser processada e nada disso é guardado.</small>
+    <ul class="exemplos" aria-label="Perguntas de exemplo">
+      <li><button type="button" data-ex="Minha casa alagou. Quanto dá pra sacar do FGTS?">Saque do FGTS</button></li>
+      <li><button type="button" data-ex="Como eu trato a água pra beber depois da enchente?">Água para beber</button></li>
+      <li><button type="button" data-ex="Tem bueiro entupido no Grajaú hoje?">Bueiros no meu bairro</button></li>
+      <li><button type="button" data-ex="O seguro do meu carro cobre enchente?">Pergunta fora da base</button></li>
+    </ul>
+    <div class="linha">
+      <label for="modo">Modo</label>
+      <select id="modo" name="modo">
+        <option value="agente" selected>Agente (recomendado)</option>
+        <option value="rag">RAG simples</option>
+        <option value="sem_contexto">Só o modelo, sem fontes (comparação)</option>
+      </select>
+      <button id="enviar" type="submit">Perguntar</button>
+    </div>
+  </form>
+
+  <div id="estado" class="nota" role="status" aria-live="polite"></div>
+  <section id="saida" aria-live="polite"></section>
+
+  <p class="nota" style="margin-top:28px">
+    O modelo de linguagem roda em um servidor próprio, sem enviar sua pergunta a terceiros, e pode levar de 20 segundos a 2 minutos para responder.
+    Este serviço é informativo e não substitui a Defesa Civil, os Bombeiros nem um serviço de saúde.
+    <a href="/fontes">Ver as fontes consultadas</a> · <a href="/docs">API</a>
+  </p>
+</main>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const texto = (tag, conteudo, classe) => {
+    const el = document.createElement(tag);
+    if (classe) el.className = classe;
+    el.textContent = conteudo;   // textContent: nada do que vem do modelo é interpretado como HTML
+    return el;
+  };
+
+  document.querySelectorAll("[data-ex]").forEach((b) =>
+    b.addEventListener("click", () => { $("pergunta").value = b.dataset.ex; $("pergunta").focus(); }));
+
+  $("formulario").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const pergunta = $("pergunta").value.trim();
+    if (pergunta.length < 3) return;
+    $("enviar").disabled = true;
+    const inicio = Date.now();
+    const relogio = setInterval(() => {
+      $("estado").textContent = "Consultando as fontes oficiais... " + Math.round((Date.now() - inicio) / 1000) + " s";
+    }, 1000);
+    $("estado").textContent = "Consultando as fontes oficiais...";
+    try {
+      const r = await fetch("/perguntar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pergunta, modo: $("modo").value }),
+      });
+      const dados = await r.json();
+      if (!r.ok) throw new Error((dados.detail || "Erro") + (dados.orientacao ? " " + dados.orientacao : ""));
+      mostrar(dados);
+      $("estado").textContent = "";
+    } catch (erro) {
+      $("estado").textContent = "Não foi possível responder agora. " + erro.message +
+        " Em emergência, ligue 199 ou 193.";
+    } finally {
+      clearInterval(relogio);
+      $("enviar").disabled = false;
+    }
+  });
+
+  function mostrar(d) {
+    const cartao = document.createElement("article");
+    cartao.className = "cartao";
+    cartao.append(texto("p", "Pergunta: " + d.pergunta, "nota"));
+    cartao.append(texto("span", d.recusa ? "Não consta nas fontes" : "Respondido com fonte", "selo " + (d.recusa ? "recusa" : "ok")));
+    cartao.append(texto("p", d.resposta, "resposta"));
+
+    const comUrl = (d.fontes || []).filter((f) => f.url);
+    if (comUrl.length) {
+      cartao.append(texto("h2", "De onde veio a resposta"));
+      const lista = document.createElement("ol");
+      lista.className = "fontes";
+      comUrl.forEach((f) => {
+        const li = document.createElement("li");
+        const a = texto("a", f.orgao + ": " + f.titulo + (f.secao ? " (" + f.secao + ")" : ""));
+        a.href = f.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+        li.append(a);
+        li.append(texto("blockquote", f.texto.length > 420 ? f.texto.slice(0, 420) + "…" : f.texto));
+        lista.append(li);
+      });
+      cartao.append(lista);
+    } else if (!d.recusa && (d.fontes || []).length) {
+      cartao.append(texto("p", "Fontes citadas de memória pelo modelo (não verificadas): " +
+        d.fontes.map((f) => f.descricao).join("; "), "nota"));
+    }
+
+    const det = document.createElement("details");
+    det.append(texto("summary", "Como esta resposta foi construída"));
+    const linhas = [
+      "modo: " + d.configuracao + " | modelo local: " + (d.modelo || "não chamado"),
+      "decisão: " + d.motivo,
+      "semelhança da pergunta com a base: " + (d.confianca ?? "n/d") + " (limiar de recusa: " + (d.limiar ?? "n/d") + ")",
+      "tempo: " + d.tempo_s + " s | chamadas ao modelo: " + d.chamadas_llm,
+    ];
+    if (d.dados_pessoais_mascarados && d.dados_pessoais_mascarados.length)
+      linhas.push("dados pessoais apagados da pergunta: " + d.dados_pessoais_mascarados.join(", "));
+    if (d.evidencia) linhas.push("frase de apoio apontada pelo modelo: " + d.evidencia +
+      (d.evidencia_confere === false ? " (não conferiu literalmente com o trecho)" : ""));
+    det.append(texto("pre", linhas.join("\n")));
+    if (d.passos && d.passos.length) det.append(texto("pre", d.passos.map((p) => JSON.stringify(p)).join("\n")));
+    cartao.append(det);
+    cartao.append(texto("p", d.aviso, "nota"));
+    $("saida").prepend(cartao);
+    cartao.setAttribute("tabindex", "-1");
+    cartao.focus();
+  }
+</script>
+</body>
+</html>

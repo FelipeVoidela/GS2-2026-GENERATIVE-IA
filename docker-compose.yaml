@@ -1,0 +1,49 @@
+# Sobe a LLM local (Ollama), baixa os modelos e publica a API.
+#
+#   docker compose up -d --build
+#   abrir http://localhost:8000
+#
+# Na primeira vez o serviço "modelos" baixa cerca de 4,5 GB (gemma3:4b e bge-m3).
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama:/root/.ollama
+    environment:
+      OLLAMA_KEEP_ALIVE: 30m
+    # sem porta publicada: só a API fala com o modelo
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  modelos:
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["/bin/sh", "-c", "ollama pull ${MODELO_EMBEDDING:-bge-m3} && ollama pull ${MODELO_LLM:-gemma3:4b}"]
+    restart: "no"
+
+  api:
+    build: .
+    depends_on:
+      modelos:
+        condition: service_completed_successfully
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      MODELO_LLM: ${MODELO_LLM:-gemma3:4b}
+      MODELO_EMBEDDING: ${MODELO_EMBEDDING:-bge-m3}
+      MAPA_URL: ${MAPA_URL:-https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/dados/mapa_cidadao.json}
+      API_CHAVE: ${API_CHAVE:-}
+      API_ORIGENS: ${API_ORIGENS:-*}
+      API_LIMITE_POR_MINUTO: ${API_LIMITE_POR_MINUTO:-20}
+    ports:
+      - "${API_PORTA:-8000}:8000"
+    restart: unless-stopped
+
+volumes:
+  ollama:
