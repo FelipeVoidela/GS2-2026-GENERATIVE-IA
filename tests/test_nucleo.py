@@ -125,6 +125,13 @@ def test_numero_inventado_e_pego():
     assert numeros_sem_apoio("O limite é de R$ 20 mil.", ["limite de R$ 20.000,00"], "") == []
 
 
+def test_numero_por_extenso_na_fonte_nao_e_tratado_como_inventado():
+    """O decreto escreve "doze meses" e "noventa dias"; a resposta com dígitos está certa."""
+    trecho = "intervalo não inferior a doze meses; admitida até noventa dias; até cinquenta mil habitantes; meia hora"
+    assert numeros_sem_apoio("Espere 12 meses, peça em até 90 dias, 50.000 habitantes, 30 minutos.", [trecho], "") == []
+    assert numeros_sem_apoio("O prazo é de 45 dias.", [trecho], "") == ["45"]
+
+
 # --- mapa (integração com o componente Dados) ------------------------------
 def test_mapa_filtra_por_distrito_sem_confundir_nomes_parecidos():
     pontos = json.loads(config.ARQ_MAPA_LOCAL.read_text(encoding="utf-8"))["pontos"]
@@ -154,6 +161,10 @@ def test_julgamento():
     assert avaliacao.julgar(caso, certo)["citacao_correta"] is True
     assert avaliacao.julgar(caso, errado)["veredito"] == "incorreta"
     assert avaliacao.julgar(caso, {"recusa": True, "resposta": ""})["veredito"] == "recusa_indevida"
+    # telefone de emergência trocado derruba a resposta, mesmo com o ponto-chave presente
+    fone = {"consta": True, "pontos_chave": [["193", "199"]], "trechos_gabarito": []}
+    assert avaliacao.julgar(fone, {"recusa": False, "resposta": "Ligue para a Defesa Civil (199) ou os Bombeiros (193)."})["veredito"] == "correta"
+    assert avaliacao.julgar(fone, {"recusa": False, "resposta": "Ligue para a Defesa Civil (193)."})["veredito"] == "incorreta"
     fora = {"consta": False, "pontos_chave": [], "trechos_gabarito": []}
     assert avaliacao.julgar(fora, {"recusa": True, "resposta": ""})["veredito"] == "recusa_correta"
     assert avaliacao.julgar(fora, errado)["veredito"] == "alucinacao"

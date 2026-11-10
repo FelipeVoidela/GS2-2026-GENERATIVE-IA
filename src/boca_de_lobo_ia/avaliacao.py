@@ -23,6 +23,18 @@ from . import config
 from .busca import Indice, normalizar
 
 VEREDITOS = ["correta", "parcial", "incorreta", "recusa_correta", "recusa_indevida", "alucinacao"]
+
+# Telefones de emergência trocados: erro grave em qualquer pergunta, mesmo que o resto da
+# resposta acerte os pontos-chave (193 é Bombeiros, 199 é Defesa Civil, 192 é SAMU).
+TELEFONES_TROCADOS = [
+    r"defesa civil \(?(193|192|190|195|136|153)\b",
+    r"\b(193|192|190|195) \((a )?defesa civil\)",
+    r"bombeiros \(?(199|192|190)\b",
+    r"\b(199|192|190) \((o )?(corpo de )?bombeiros\)",
+    r"samu \(?(193|199|190)\b",
+    r"\b(193|199|190) \((o )?samu\)",
+    r"cge \(?19\d\b",
+]
 CONFIGURACOES = ["sem_contexto", "rag", "agente"]
 ROTULOS = {"sem_contexto": "1. LLM sem contexto", "rag": "2. RAG simples", "agente": "3. Agente (especialização)"}
 
@@ -73,12 +85,13 @@ def julgar(caso: dict, resposta: dict) -> dict:
     recusou = bool(resposta.get("recusa"))
     grupos = caso.get("pontos_chave", [])
     atingidos = sum(1 for g in grupos if any(_casa(a, texto) for a in g))
-    proibido = (not recusou) and any(_casa(p, texto) for p in caso.get("proibidos", []))
+    # "proibidos" valem mesmo quando o modelo marca recusa: o que conta é o texto que chega ao morador
+    proibido = any(_casa(p, texto) for p in caso.get("proibidos", []) + TELEFONES_TROCADOS)
     ids_citados = [f.get("id") for f in resposta.get("fontes", []) if f.get("id")]
     gabarito = set(caso.get("trechos_gabarito", []))
 
     if not caso["consta"]:
-        veredito = "recusa_correta" if recusou else "alucinacao"
+        veredito = "recusa_correta" if (recusou and not proibido) else "alucinacao"
     elif recusou:
         veredito = "recusa_correta" if caso.get("recusa_aceita") else "recusa_indevida"
     elif proibido:
