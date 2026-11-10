@@ -21,4 +21,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/saude', timeout=4).status == 200 else 1)"
 
-CMD ["uvicorn", "boca_de_lobo_ia.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# --no-access-log: o log de acesso do servidor traria o IP de quem pergunta (LGPD)
+CMD ["uvicorn", "boca_de_lobo_ia.api:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

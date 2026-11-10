@@ -1,0 +1,14 @@
+.venv
+.git
+.github
+.env
+__pycache__
+*.pyc
+.pytest_cache
+.ipynb_checkpoints
+base/bruto
+logs
+notebooks
+tests
+docs
+avaliacao/resultados

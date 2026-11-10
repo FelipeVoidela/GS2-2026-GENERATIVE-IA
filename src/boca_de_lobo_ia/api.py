@@ -30,7 +30,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 
-from . import __version__, agente, coleta, config, geracao, llm
+from . import __version__, agente, config, geracao, llm
 from .busca import Indice
 
 AVISO = (
@@ -151,6 +151,7 @@ def saude() -> dict:
 @app.get("/fontes")
 def fontes() -> list[dict]:
     contagem = Counter(t.fonte_id for t in indice().trechos)
+    catalogo = json.loads(config.ARQ_FONTES.read_text(encoding="utf-8"))
     return [
         {
             "id": f["id"],
@@ -162,7 +163,7 @@ def fontes() -> list[dict]:
             "tipo_texto": f["tipo_texto"],
             "trechos": contagem.get(f["id"], 0),
         }
-        for f in coleta.carregar_fontes()
+        for f in catalogo
     ]
 
 

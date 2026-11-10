@@ -175,7 +175,7 @@ Para refazer do zero, apague `avaliacao/resultados/`.
 **7. API e tela.**
 
 ```bash
-.venv/Scripts/python -m uvicorn boca_de_lobo_ia.api:app --app-dir src --port 8000
+.venv/Scripts/python -m uvicorn boca_de_lobo_ia.api:app --app-dir src --port 8000 --no-access-log
 ```
 
 Abra http://localhost:8000 (tela) ou http://localhost:8000/docs (contrato da API).
@@ -261,7 +261,7 @@ Quando não consta: `"recusa": true`, `"fontes": []` e `"motivo"` igual a `abaix
 | Finalidade e necessidade | o assistente não precisa saber quem é o morador; não há cadastro nem login |
 | Dados digitados por engano | CPF, CNPJ, RG, telefone, e-mail e CEP são trocados por marcadores **antes** da busca, da LLM e do log (`lgpd.py`) |
 | Compartilhamento | a pergunta não sai da infraestrutura do produto: LLM e embeddings são locais |
-| Registro | o log guarda a pergunta já mascarada, a decisão e as fontes; não guarda IP nem identificador. A pasta `logs/` não vai para o Git |
+| Registro | o log guarda a pergunta já mascarada, a decisão e as fontes; não guarda IP nem identificador (o log de acesso do servidor fica desligado, `--no-access-log`). A pasta `logs/` não vai para o Git |
 | Transparência | a tela avisa o que acontece com os dados e que a resposta é informativa |
 | Base de conhecimento | só documentos públicos de órgãos oficiais; nenhum dado pessoal. O mapa consumido é a view `ouro_vw_mapa_cidadao`, que o componente Dados publica sem dado pessoal |
 | Limite conhecido | nomes próprios não são detectados (exigiria um modelo de NER e erraria em nomes de rua) |
