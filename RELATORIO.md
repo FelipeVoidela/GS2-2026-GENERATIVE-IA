@@ -308,8 +308,9 @@ que não estava em nenhum trecho recuperado (erro 4).
 
 ### 5.5 Como o agente chegou ao desenho final
 
-O agente passou por quatro rodadas na partição dev antes de responder qualquer pergunta de teste. As respostas
-de cada rodada estão em `avaliacao/historico/` e a tabela completa, no notebook 04.
+O agente passou por quatro rodadas na partição dev antes de responder qualquer pergunta de teste: três de
+ajuste e a final. As respostas das três primeiras estão em `avaliacao/historico/`, as da final em
+`avaliacao/resultados/`, e a tabela completa, no notebook 04.
 
 | Rodada | O que apareceu na dev | Correção |
 |---|---|---|
