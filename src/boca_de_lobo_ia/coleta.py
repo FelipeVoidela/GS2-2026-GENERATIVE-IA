@@ -270,7 +270,6 @@ def para_markdown(fonte: dict, blocos: list[Bloco], acessado_em: str) -> str:
 def coletar(atualizar: bool = False, somente: list[str] | None = None) -> list[dict]:
     """Baixa as fontes e (re)gera os documentos literais. Devolve um resumo por fonte."""
     config.DIR_DOCUMENTOS.mkdir(parents=True, exist_ok=True)
-    hoje = dt.date.today().isoformat()
     resumo = []
     for fonte in carregar_fontes():
         if somente and fonte["id"] not in somente:
@@ -286,7 +285,9 @@ def coletar(atualizar: bool = False, somente: list[str] | None = None) -> list[d
                 if not blocos:
                     raise ValueError("a extração não devolveu texto; confira as regras em fontes.json")
                 destino = config.DIR_DOCUMENTOS / f"{fonte['id']}.md"
-                destino.write_text(para_markdown(fonte, blocos, hoje), encoding="utf-8")
+                # data de acesso = dia em que o original foi baixado (não o dia desta execução)
+                baixado_em = dt.date.fromtimestamp(caminho.stat().st_mtime).isoformat()
+                destino.write_text(para_markdown(fonte, blocos, baixado_em), encoding="utf-8")
                 item["blocos"] = len(blocos)
             else:
                 ficha = config.DIR_DOCUMENTOS / f"{fonte['id']}.md"

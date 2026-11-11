@@ -1,0 +1,10 @@
+recorte,configuracao,casos,acerto_pct,alucinacao_pct,recusa_indevida_pct,recusa_no_nao_consta_pct,citacao_correta_pct,json_valido_pct,chamadas_llm_media,corretas_respondiveis_pct,parciais_pct,evidencia_confere_pct,tempo_medio_s
+teste,1. LLM sem contexto,56,30.4,60.7,4.5,33.3,0.0,100.0,1,29.5,5.4,0.0,26.4
+teste,2. RAG simples,56,76.8,5.4,22.7,100.0,90.6,100.0,0.71,70.5,0.0,96.9,26.2
+teste,3. Agente (especialização),56,85.7,7.1,6.8,91.7,85.0,100.0,1.82,84.1,1.8,90.0,29.4
+teste_sem_produto,1. LLM sem contexto,51,33.3,58.8,2.6,33.3,0.0,100.0,1,33.3,5.9,0.0,26.7
+teste_sem_produto,2. RAG simples,51,84.3,5.9,12.8,100.0,90.6,100.0,0.78,79.5,0.0,96.9,28.7
+teste_sem_produto,3. Agente (especialização),51,86.3,5.9,7.7,91.7,82.9,100.0,1.8,84.6,2.0,97.1,28.6
+dev,1. LLM sem contexto,21,28.6,57.1,13.3,33.3,0.0,100.0,1,26.7,4.8,0.0,13.5
+dev,2. RAG simples,21,90.5,4.8,6.7,100.0,100.0,100.0,0.81,86.7,0.0,100.0,18.3
+dev,3. Agente (especialização),21,90.5,4.8,0.0,100.0,93.3,100.0,1.9,86.7,4.8,93.3,68.4

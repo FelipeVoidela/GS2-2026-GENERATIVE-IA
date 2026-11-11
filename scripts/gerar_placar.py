@@ -23,9 +23,34 @@ COLUNAS = [
     ("recusa_no_nao_consta_pct", 'Recusa no "não consta" (%)'),
     ("citacao_correta_pct", "Citação correta (%)"),
     ("json_valido_pct", "JSON válido (%)"),
-    ("tempo_mediano_s", "Tempo mediano (s)"),
     ("chamadas_llm_media", "Chamadas à LLM"),
 ]
+# O tempo não entra nesta tabela: parte das rodadas foi feita com duas avaliações disputando o
+# processador. O tempo comparável é o de scripts/medir_tempos.py (avaliacao/tempos.json).
+COLUNAS_TEMPO = [
+    ("configuracao", "Configuração"),
+    ("perguntas", "Perguntas"),
+    ("tempo_mediano_s", "Tempo mediano (s)"),
+    ("tempo_medio_s", "Tempo médio (s)"),
+    ("tempo_p90_s", "Percentil 90 (s)"),
+    ("tempo_maximo_s", "Máximo (s)"),
+    ("chamadas_llm_media", "Chamadas à LLM"),
+]
+
+
+def tempos() -> tuple[list[dict], dict]:
+    """Linhas da tabela de tempo (vazia se scripts/medir_tempos.py ainda não rodou)."""
+    import json
+
+    caminho = config.DIR_AVALIACAO / "tempos.json"
+    if not caminho.exists():
+        return [], {}
+    dados = json.loads(caminho.read_text(encoding="utf-8"))
+    linhas = [
+        {"configuracao": avaliacao.ROTULOS[nome], **{k: v for k, v in m.items() if k != "tempos_s"}}
+        for nome, m in dados["configuracoes"].items()
+    ]
+    return linhas, dados
 
 LEGENDA = """
 **Como ler**
@@ -55,7 +80,8 @@ def tabela_md(linhas: list[dict], colunas=COLUNAS) -> str:
 
 
 def main() -> None:
-    sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stdout, "reconfigure"):  # no Jupyter a saída não tem esse método
+        sys.stdout.reconfigure(encoding="utf-8")
     teste = avaliacao.placar("teste")
     if not teste:
         sys.exit("Não há respostas gravadas em avaliacao/resultados/. Rode scripts/avaliar.py.")
@@ -101,6 +127,17 @@ def main() -> None:
         tabela_md(dev),
         "",
     ]
+    linhas_tempo, dados_tempo = tempos()
+    if linhas_tempo:
+        md += [
+            "## Tempo de resposta",
+            "",
+            f"Medido por `scripts/medir_tempos.py`: {len(dados_tempo['amostra'])} perguntas da partição dev, uma por vez, "
+            f"sem nada concorrendo. Máquina: {dados_tempo['maquina']}.",
+            "",
+            tabela_md(linhas_tempo, COLUNAS_TEMPO),
+            "",
+        ]
     (config.DIR_AVALIACAO / "placar.md").write_text("\n".join(md), encoding="utf-8")
     print(tabela_md(teste))
     print("\ngravados: avaliacao/placar.md e avaliacao/placar.csv")

@@ -1,0 +1,86 @@
+{
+  "modelo": "gemma3:4b",
+  "maquina": "AMD Ryzen 5 5600X, 6 núcleos, 32 GB de RAM (CPU, sem GPU; Ollama em container Docker)",
+  "amostra": [
+    "S01",
+    "S03",
+    "S06",
+    "S10",
+    "S18",
+    "S21",
+    "D01",
+    "D06",
+    "D12",
+    "M01",
+    "N01",
+    "N05"
+  ],
+  "configuracoes": {
+    "sem_contexto": {
+      "perguntas": 12,
+      "tempo_mediano_s": 12.6,
+      "tempo_medio_s": 13.4,
+      "tempo_p90_s": 15.3,
+      "tempo_maximo_s": 18.2,
+      "chamadas_llm_media": 1,
+      "tempos_s": [
+        10.04,
+        12.02,
+        12.5,
+        15.44,
+        13.63,
+        12.28,
+        11.85,
+        12.62,
+        15.27,
+        13.98,
+        12.44,
+        18.21
+      ]
+    },
+    "rag": {
+      "perguntas": 12,
+      "tempo_mediano_s": 27.1,
+      "tempo_medio_s": 26.0,
+      "tempo_p90_s": 29.7,
+      "tempo_maximo_s": 29.9,
+      "chamadas_llm_media": 1,
+      "tempos_s": [
+        29.89,
+        27.98,
+        21.8,
+        29.84,
+        25.11,
+        21.93,
+        29.45,
+        28.98,
+        26.19,
+        29.73,
+        19.2,
+        22.12
+      ]
+    },
+    "agente": {
+      "perguntas": 12,
+      "tempo_mediano_s": 36.3,
+      "tempo_medio_s": 36.8,
+      "tempo_p90_s": 42.6,
+      "tempo_maximo_s": 46.0,
+      "chamadas_llm_media": 2,
+      "tempos_s": [
+        25.95,
+        41.33,
+        31.86,
+        42.65,
+        35.28,
+        32.66,
+        40.63,
+        43.83,
+        37.29,
+        45.95,
+        29.39,
+        34.63
+      ]
+    }
+  }
+}

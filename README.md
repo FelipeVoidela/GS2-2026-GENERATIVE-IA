@@ -39,7 +39,23 @@ e recebe a orientação da Defesa Civil ou o artigo do decreto, com o link.
 
 ## Resultado
 
-<!-- PLACAR -->
+O mesmo modelo (`gemma3:4b`, local, temperatura 0) em três configurações, nas 56 perguntas de teste:
+
+| Configuração | Acerto | Alucinação | Recusa no "não consta" | Citação correta | Tempo mediano (CPU) |
+|---|---|---|---|---|---|
+| 1. LLM sem contexto | 30,4% | 60,7% | 33,3% | 0% | 12,6 s |
+| 2. RAG simples | 76,8% | 5,4% | 100% | 90,6% | 27,1 s |
+| 3. Agente (especialização) | **85,7%** | 7,1% | 91,7% | 85,0% | 36,3 s |
+
+* Com a base, o modelo acerta mais e alucina 11 vezes menos. Sem ela, inventa valores, prazos e telefones
+  (disse, por exemplo, que a isenção de IPTU é de "até 80%" e mandou ligar uma geladeira que ficou na água).
+* O agente ganha do RAG simples por causa da ferramenta que consulta o mapa do componente Dados. Nas perguntas
+  respondidas só com documentos os dois praticamente empatam, e o agente custa o dobro de chamadas à LLM.
+* Busca híbrida: recall@1 de 0,641 e recall@3 de 0,846 no teste. Limiar de recusa: 0,55.
+
+Placar completo em [avaliacao/placar.md](avaliacao/placar.md); interpretação, alucinações e os 5 erros no
+[RELATORIO.md](RELATORIO.md) e no [notebook 05](notebooks/05_placar_e_erros.ipynb). Os vereditos vêm de um
+juiz automático que foi auditado caso a caso ([avaliacao/AUDITORIA.md](avaliacao/AUDITORIA.md)).
 
 ## Arquitetura do pipeline de IA
 
@@ -57,12 +73,13 @@ flowchart TD
     AG -->|"até 3 consultas"| B["buscar_base<br/>busca híbrida (RRF)"]
     AG -->|"situação de um bairro"| M["consultar_mapa<br/>camada Ouro do componente Dados"]
     I --> B
-    B --> LIM{"confiança<br/>abaixo do limiar 0,55?"}
-    LIM -->|sim| R["Recusa<br/>sem chamar a LLM"]
+    B --> LIM{"confiança da pergunta<br/>abaixo do limiar 0,55<br/>e sem dado do mapa?"}
+    LIM -->|sim| R["Recusa<br/>sem gerar resposta"]
     LIM -->|não| G["LLM local gemma3:4b<br/>geração presa aos trechos<br/>saída em JSON Schema"]
     M --> G
+    G -->|"os trechos não respondem"| R
     G --> V{"Verificação<br/>fonte citada? números<br/>existem nos trechos?"}
-    V -->|"reprovou (1 nova tentativa)"| AG
+    V -->|"reprovou: gera de novo<br/>com a crítica (1 vez)"| G
     V -->|"reprovou de novo"| R
     V -->|aprovou| S["JSON: resposta + fontes + evidência<br/>+ passos (explicação)"]
     R --> S
@@ -86,10 +103,13 @@ base/                      base de conhecimento
   trechos.jsonl              os 146 trechos, cada um com fonte
   indice/                    embeddings dos trechos
 avaliacao/                 teste e placar
-  casos_teste.jsonl          77 perguntas com gabarito (19 "não consta")
+  casos_teste.jsonl          77 perguntas com gabarito (18 "não consta")
   limiar.json                limiar de recusa calibrado
   resultados/                respostas das 3 configurações, caso a caso
   placar.md, placar.csv      placar final
+  tempos.json                tempo de resposta medido sem concorrência
+  AUDITORIA.md               o que foi ajustado no juiz automático, e por quê
+  historico/                 respostas das rodadas de calibração do agente (partição dev)
 src/boca_de_lobo_ia/       código
   coleta.py trechos.py       base
   busca.py                   BM25, vetorial e híbrida
@@ -98,7 +118,7 @@ src/boca_de_lobo_ia/       código
   lgpd.py                    mascaramento de dados pessoais
   avaliacao.py               gabarito, recall, limiar e placar
   api.py                     API FastAPI
-scripts/                   construir_base.py e avaliar.py
+scripts/                   construir_base.py, avaliar.py, gerar_placar.py e medir_tempos.py
 web/index.html             tela de conversa
 tests/                     testes que rodam sem a LLM
 dados/mapa_cidadao.json    cópia do export da camada Ouro (usada na avaliação e como reserva)
@@ -159,12 +179,26 @@ python -m venv .venv
 ```
 
 **5. Avaliação.** Roda as 3 configurações nos 77 casos e grava cada resposta em `avaliacao/resultados/`.
-Em CPU leva de 2 a 3 horas; pode ser interrompida e retomada (o que já foi respondido não é refeito).
-Para refazer do zero, apague `avaliacao/resultados/`.
+Em CPU leva cerca de uma hora e meia; pode ser interrompida e retomada (o que já foi respondido não é
+refeito). Para refazer do zero, apague `avaliacao/resultados/`.
 
 ```bash
 .venv/Scripts/python scripts/avaliar.py
 ```
+
+Depois, o placar (`avaliacao/placar.md` e `placar.csv`) sai das respostas gravadas, sem chamar a LLM:
+
+```bash
+.venv/Scripts/python scripts/gerar_placar.py
+```
+
+O tempo de resposta é medido à parte, com 12 perguntas e nada concorrendo (uns 15 minutos):
+
+```bash
+.venv/Scripts/python scripts/medir_tempos.py
+```
+
+Se o gabarito mudar, `scripts/avaliar.py --rejulgar` recalcula os vereditos sem gerar as respostas de novo.
 
 **6. Notebooks.** Reexecuta e salva as saídas (os notebooks 03 e 04 chamam a LLM ao vivo, cerca de 10 minutos):
 
@@ -227,7 +261,7 @@ Quando não consta: `"recusa": true`, `"fontes": []` e `"motivo"` igual a `abaix
 
 | Item | Onde |
 |---|---|
-| 01 · Tarefa da IA e casos de teste com gabarito, incluindo "não consta" | notebook 01 (tarefa) e 02 (casos); `avaliacao/casos_teste.jsonl` (77 casos, 19 "não consta") |
+| 01 · Tarefa da IA e casos de teste com gabarito, incluindo "não consta" | notebook 01 (tarefa) e 02 (casos); `avaliacao/casos_teste.jsonl` (77 casos, 18 "não consta") |
 | 02 · Base de conhecimento, em trechos com fonte | notebook 01; `base/fontes.json`, `base/documentos/`, `base/trechos.jsonl` |
 | 03 · Busca com recall@1 e recall@3 medidos e limiar justificado | notebook 02; `src/boca_de_lobo_ia/busca.py`; `avaliacao/limiar.json` |
 | 04 · Geração fundamentada: JSON válido, citação da fonte e recusa | notebook 03; `geracao.py` |
@@ -268,7 +302,7 @@ Quando não consta: `"recusa": true`, `"fontes": []` e `"motivo"` igual a `abaix
 
 ## Limitações conhecidas
 
-* **Velocidade.** Em CPU, o RAG simples leva cerca de 25 segundos e o agente, de 1 a 2 minutos. Com GPU o mesmo código responde em poucos segundos.
+* **Velocidade.** Em CPU, o RAG simples leva cerca de 27 segundos e o agente, cerca de 36 (mediana). Não medimos em GPU, onde a geração costuma ser muito mais rápida.
 * **Cobertura.** A base tem 22 fontes e cobre a cidade de São Paulo. Assuntos próximos que o morador pergunta (seguro, ressarcimento de energia, segunda via de documentos) ainda não estão nela; o sistema recusa.
 * **Fichas-resumo.** 9 das 22 fontes entram como resumo escrito pela equipe, porque a página não declara licença de reprodução. O resumo foi conferido com o original, mas não é o texto oficial.
 * **Juiz automático.** O acerto é medido por pontos-chave (expressões regulares). Ele não avalia redação e pode deixar passar um erro factual fora dos pontos; por isso o relatório traz também a leitura manual dos erros.

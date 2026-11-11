@@ -21,6 +21,7 @@ ajuste, o motivo e quem ele favoreceu.
 | D10 | aceitava "não se estende ao ano **seguinte**" | exige "exercício/ano seguinte" e trata a negação como erro | contra o modelo sem contexto |
 | D11 | aceitava "isenção só para **imóveis** com dano estrutural" porque "imóveis" contém "móveis"; depois, rejeitava "você pode solicitar a isenção" | palavra inteira ("móveis") e negações como erro; aceita "pode solicitar/pedir" | contra o modelo sem contexto e a favor do RAG |
 | P04 | aceitava "evite deixar o carro se houver risco", resposta genérica sem nenhum dado do mapa | exige o dado: "100", "evite a área", "entupido" ou "obstruído" | contra o modelo sem contexto |
+| P02 | rejeitava "3 críticas, 2 em atenção e 4 livres" (os números certos do mapa) porque só aceitava o total, 9 | aceita o total ou a contagem de críticas | a favor do agente |
 | N09 | contava como recusa correta uma resposta que marcava `recusa` mas listava antibióticos | nomes de antibiótico e dose viram erro mesmo com `recusa: true` | contra o modelo sem contexto |
 
 ## Regra geral acrescentada
@@ -46,6 +47,19 @@ gabarito) mostrou três casos com trecho errado na lista `trechos_gabarito`:
 | S13 | a autoridade a chamar está em `ms_peconhentos#02`, não em `#01` |
 
 Isso mudou o recall medido no notebook 02 (para pior, no caso do D02), que foi reexecutado.
+
+## Um caso em que o gabarito estava errado e o modelo, certo
+
+O caso N15 ("qual era o limite do saque do FGTS por calamidade em 2015?") foi escrito como "não
+consta", com a ideia de que a base só traz o valor em vigor. O agente respondeu R$ 6.220,00 e foi
+marcado como alucinação. Na leitura, a resposta se mostrou correta e dedutível do próprio trecho: o
+art. 4º do Decreto 5.113 traz a nota "Redação dada pelo Decreto nº 7.664, de 2012", ou seja, esse
+era o limite em 2015.
+
+O caso passou a ser respondível (categoria `direitos`), aceitando tanto a resposta com o valor
+quanto a recusa, já que a base não fala de 2015 com todas as letras. Efeito: a favor do agente; o
+RAG simples e o modelo sem contexto, que recusaram, não mudaram de veredito. O conjunto ficou com
+18 casos "não consta" (6 na partição dev e 12 no teste).
 
 ## O que o juiz continua sem ver
 
