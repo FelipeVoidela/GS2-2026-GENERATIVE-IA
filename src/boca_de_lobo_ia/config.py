@@ -56,6 +56,8 @@ API_CHAVE = os.getenv("API_CHAVE", "")  # vazio = sem autenticação (uso local)
 API_ORIGENS = [o.strip() for o in os.getenv("API_ORIGENS", "*").split(",") if o.strip()]
 API_MAX_PERGUNTA = int(os.getenv("API_MAX_PERGUNTA", "500"))
 API_LIMITE_POR_MINUTO = int(os.getenv("API_LIMITE_POR_MINUTO", "20"))
+# Perguntas aceitas ao mesmo tempo (1 em geração + as que esperam). Acima disso, 429.
+API_FILA_MAX = max(1, int(os.getenv("API_FILA_MAX", "3")))
 ARQ_LOG_API = Path(os.getenv("ARQ_LOG_API", str(RAIZ / "logs" / "perguntas.jsonl")))
 
 

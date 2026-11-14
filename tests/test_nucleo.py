@@ -168,3 +168,22 @@ def test_julgamento():
     fora = {"consta": False, "pontos_chave": [], "trechos_gabarito": []}
     assert avaliacao.julgar(fora, {"recusa": True, "resposta": ""})["veredito"] == "recusa_correta"
     assert avaliacao.julgar(fora, errado)["veredito"] == "alucinacao"
+
+
+def test_fila_cheia_devolve_429_em_vez_de_empilhar():
+    import pytest
+    from fastapi import HTTPException
+
+    from boca_de_lobo_ia import api
+
+    for _ in range(config.API_FILA_MAX):
+        api.reservar_vaga()
+    try:
+        with pytest.raises(HTTPException) as erro:
+            api.reservar_vaga()
+        assert erro.value.status_code == 429
+    finally:
+        for _ in range(config.API_FILA_MAX):
+            api._vagas.release()
+    api.reservar_vaga()  # com a fila livre, volta a aceitar
+    api._vagas.release()

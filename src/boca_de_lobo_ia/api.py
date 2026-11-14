@@ -12,7 +12,7 @@ Segurança e LGPD (ver README):
     * a LLM roda localmente; a pergunta não vai para serviço externo;
     * identificadores pessoais digitados são mascarados antes da busca, da LLM e do log;
     * o log guarda só a pergunta mascarada e metadados, sem IP nem identificador do morador;
-    * tamanho de entrada limitado, limite de requisições por minuto e chave opcional (X-API-Key);
+    * tamanho de entrada limitado, limite de requisições por minuto, fila curta e chave opcional (X-API-Key);
     * a saída é sempre um JSON de formato fixo; resposta sem fonte não é entregue.
 """
 from __future__ import annotations
@@ -39,6 +39,7 @@ AVISO = (
 )
 _estado: dict = {"indice": None}
 _trava_llm = threading.Lock()  # uma geração por vez: o modelo roda em CPU
+_vagas = threading.BoundedSemaphore(config.API_FILA_MAX)  # perguntas em geração ou esperando a vez
 _trava_log = threading.Lock()
 _janelas: dict[str, deque] = defaultdict(deque)
 
@@ -89,6 +90,19 @@ def autorizar(request: Request, x_api_key: str | None = Header(default=None)) ->
     if len(janela) >= config.API_LIMITE_POR_MINUTO:
         raise HTTPException(status_code=429, detail="Muitas perguntas em pouco tempo. Tente de novo em um minuto.")
     janela.append(agora)
+
+
+def reservar_vaga() -> None:
+    """Fila curta: com ela cheia, quem chega recebe 429 em vez de esperar vários minutos.
+
+    O modelo responde uma pergunta por vez. Sem este limite, um pico de acessos empilharia
+    requisições e cada uma esperaria a soma das anteriores.
+    """
+    if not _vagas.acquire(blocking=False):
+        raise HTTPException(
+            status_code=429,
+            detail="O assistente está respondendo outras perguntas. Tente de novo em um minuto.",
+        )
 
 
 def registrar(resposta: geracao.Resposta) -> None:
@@ -169,12 +183,16 @@ def fontes() -> list[dict]:
 
 @app.post("/perguntar", dependencies=[Depends(autorizar)])
 def perguntar(entrada: Pergunta) -> dict:
-    with _trava_llm:
-        if entrada.modo == "agente":
-            resposta = agente.responder_agente(entrada.pergunta, indice())
-        elif entrada.modo == "rag":
-            resposta = geracao.responder_rag(entrada.pergunta, indice())
-        else:
-            resposta = geracao.responder_sem_contexto(entrada.pergunta)
+    reservar_vaga()
+    try:
+        with _trava_llm:
+            if entrada.modo == "agente":
+                resposta = agente.responder_agente(entrada.pergunta, indice())
+            elif entrada.modo == "rag":
+                resposta = geracao.responder_rag(entrada.pergunta, indice())
+            else:
+                resposta = geracao.responder_sem_contexto(entrada.pergunta)
+    finally:
+        _vagas.release()
     registrar(resposta)
     return {**resposta.para_dict(), "aviso": AVISO}

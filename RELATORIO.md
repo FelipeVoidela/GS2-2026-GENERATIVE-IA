@@ -33,7 +33,7 @@ conferido nos notebooks (com as saídas salvas) e nas respostas gravadas em `ava
 | Componentes | Robô (Maker Lab) · YOLO (Visão) · **assistente com RAG e agente (este componente)** · pipeline de dados (Big Data) · bot de alertas (RPA) · mapa público com observabilidade (DevOps) · modelo de negócio (BI) |
 | Fontes de dados | 22 fontes oficiais em 146 trechos (tabela do item 04) e o export da camada Ouro do componente Dados (`ouro_vw_mapa_cidadao`) |
 | Modelos de IA | LLM `gemma3:4b` (Google, 4 bilhões de parâmetros, quantizada em 4 bits) e embeddings `bge-m3` (BAAI, multilíngue), os dois rodando localmente pelo Ollama, em CPU |
-| URL do MVP e repositório | Mapa do cidadão: https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/ · Repositório deste componente: https://github.com/FelipeVoidela/GS2-2026-GENERATIVE-IA |
+| URL do MVP e repositório | Mapa do cidadão: https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/ · Assistente no ar: https://pc-felipe.tail58a92a.ts.net:8443 · Repositório deste componente: https://github.com/FelipeVoidela/GS2-2026-GENERATIVE-IA |
 | Indicadores de impacto | Acerto e taxa de alucinação nas 56 perguntas de teste; recusa correta do que não consta; tempo de resposta |
 | ODS | 11 (cidades resilientes), 13 (adaptação ao clima), 3 (saúde) |
 
@@ -429,6 +429,7 @@ documentos) e testar com moradores se a resposta é entendida.
 | | |
 |---|---|
 | Repositório deste componente | https://github.com/FelipeVoidela/GS2-2026-GENERATIVE-IA |
+| Assistente no ar | https://pc-felipe.tail58a92a.ts.net:8443 (roda no computador da equipe, com a LLM local; de 20 segundos a 2 minutos por resposta) |
 | Vídeo | **a incluir pela equipe antes da entrega** |
 | Notebooks (com saídas) | [01 base](notebooks/01_base_conhecimento.ipynb) · [02 busca](notebooks/02_busca_recall_limiar.ipynb) · [03 geração](notebooks/03_geracao_rag.ipynb) · [04 agente](notebooks/04_agente.ipynb) · [05 placar e erros](notebooks/05_placar_e_erros.ipynb) |
 | Placar e auditoria | [avaliacao/placar.md](avaliacao/placar.md) · [avaliacao/AUDITORIA.md](avaliacao/AUDITORIA.md) |

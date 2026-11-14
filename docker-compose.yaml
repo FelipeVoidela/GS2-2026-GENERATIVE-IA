@@ -12,6 +12,7 @@ services:
     environment:
       OLLAMA_KEEP_ALIVE: 30m
     # sem porta publicada: só a API fala com o modelo
+    restart: unless-stopped  # volta junto com a API quando a máquina reinicia
     healthcheck:
       test: ["CMD", "ollama", "list"]
       interval: 10s
@@ -41,6 +42,7 @@ services:
       API_CHAVE: ${API_CHAVE:-}
       API_ORIGENS: ${API_ORIGENS:-*}
       API_LIMITE_POR_MINUTO: ${API_LIMITE_POR_MINUTO:-20}
+      API_FILA_MAX: ${API_FILA_MAX:-3}
     ports:
       - "${API_PORTA:-8000}:8000"
     restart: unless-stopped

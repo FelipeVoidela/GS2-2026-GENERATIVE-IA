@@ -12,6 +12,8 @@ e recebe a orientação da Defesa Civil ou o artigo do decreto, com o link.
 
 **Relatório completo (os 7 itens pedidos): [RELATORIO.md](RELATORIO.md)**
 
+**Assistente no ar: https://pc-felipe.tail58a92a.ts.net:8443** (detalhes em [Assistente no ar](#assistente-no-ar))
+
 ## Integrantes
 
 | Nome completo | RM |
@@ -33,7 +35,7 @@ e recebe a orientação da Defesa Civil ou o artigo do decreto, com o link.
 | Componentes do produto | Robô (Maker Lab) · YOLO (Visão) · **assistente com RAG e agente (este repo)** · pipeline de dados (Big Data) · bot de alertas (RPA) · mapa público com observabilidade (DevOps) · modelo de negócio (BI) |
 | Fontes de dados | 22 fontes oficiais (Defesa Civil nacional, estadual e municipal, Ministério da Saúde, Planalto, Prefeitura de São Paulo, CGE) em 146 trechos; mais o export da camada Ouro do componente Dados |
 | Modelos de IA | LLM `gemma3:4b` e embeddings `bge-m3`, os dois locais (Ollama, CPU). Nenhuma API paga, nenhum dado enviado a terceiros |
-| URL do MVP e repositório | Mapa do cidadão: https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/ · Este repositório: https://github.com/FelipeVoidela/GS2-2026-GENERATIVE-IA · A API e a tela do assistente rodam com `docker compose up` (a LLM é local, por isso não há URL pública gratuita; o deploy é do componente DevOps) |
+| URL do MVP e repositório | Mapa do cidadão: https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/ · Este repositório: https://github.com/FelipeVoidela/GS2-2026-GENERATIVE-IA · Assistente no ar: https://pc-felipe.tail58a92a.ts.net:8443 (a LLM roda no computador da equipe; para rodar na sua máquina, `docker compose up`) |
 | Indicadores de impacto | Acerto e alucinação medidos em 56 perguntas de teste; recusa correta do que não consta; tempo de resposta |
 | ODS | 11 (cidades resilientes), 13 (adaptação ao clima), 3 (saúde) |
 
@@ -56,6 +58,18 @@ O mesmo modelo (`gemma3:4b`, local, temperatura 0) em três configurações, nas
 Placar completo em [avaliacao/placar.md](avaliacao/placar.md); interpretação, alucinações e os 5 erros no
 [RELATORIO.md](RELATORIO.md) e no [notebook 05](notebooks/05_placar_e_erros.ipynb). Os vereditos vêm de um
 juiz automático que foi auditado caso a caso ([avaliacao/AUDITORIA.md](avaliacao/AUDITORIA.md)).
+
+## Assistente no ar
+
+**https://pc-felipe.tail58a92a.ts.net:8443**
+
+* É a mesma stack deste repositório (`docker compose up`), rodando no computador de um integrante e publicada
+  por um túnel HTTPS (Tailscale Funnel). A LLM continua local: a pergunta não vai para nenhuma API de terceiros.
+* **É lento.** O modelo roda em CPU: de 20 segundos a 2 minutos por resposta, uma pergunta por vez. Se várias
+  pessoas perguntarem ao mesmo tempo, quem passar da fila recebe o aviso para tentar de novo em um minuto.
+* A tela tem perguntas de exemplo; `/docs` mostra o contrato da API e `/saude`, a situação dos modelos.
+* Se o endereço estiver fora do ar (computador desligado ou sem internet), o assistente roda na sua máquina
+  com o [caminho curto](#caminho-curto-só-usar-o-assistente) abaixo.
 
 ## Arquitetura do pipeline de IA
 
@@ -214,6 +228,19 @@ Se o gabarito mudar, `scripts/avaliar.py --rejulgar` recalcula os vereditos sem 
 
 Abra http://localhost:8000 (tela) ou http://localhost:8000/docs (contrato da API).
 
+**8. URL pública (opcional).** Com a stack no ar (`docker compose up -d --build`) e o
+[Tailscale](https://tailscale.com/kb/1223/funnel) instalado e com o Funnel habilitado na conta:
+
+```bash
+tailscale funnel --bg --https=8443 http://127.0.0.1:8000
+```
+
+O endereço fica `https://<máquina>.<rede>.ts.net:8443` e volta sozinho quando a máquina reinicia. Para tirar do ar:
+
+```bash
+tailscale funnel --https=8443 off
+```
+
 A geração usa temperatura 0 e semente fixa (42). Mesmo assim, versões diferentes do Ollama ou do
 processador podem mudar uma ou outra resposta; por isso as respostas usadas no placar estão gravadas
 em `avaliacao/resultados/`.
@@ -276,6 +303,8 @@ Quando não consta: `"recusa": true`, `"fontes": []` e `"motivo"` igual a `abaix
 
 * A LLM só fala com a API; no `docker-compose.yaml` a porta do Ollama não é publicada.
 * Entrada limitada a 500 caracteres, limite de requisições por minuto e chave opcional (`API_CHAVE`, cabeçalho `X-API-Key`).
+* Fila curta (`API_FILA_MAX`, padrão 3): o modelo responde uma pergunta por vez, e quem chega com a fila cheia recebe 429 em vez de esperar vários minutos. Na URL pública todas as requisições chegam pelo túnel, então o limite por minuto vale para o conjunto dos visitantes.
+* Na URL pública só a porta da API é exposta; o Ollama não tem porta publicada.
 * Instrução dentro da pergunta ou de um trecho é tratada como dado (regra 7 do prompt e pergunta delimitada). Há um caso de teste só para isso (`X01`).
 * Falha fechada: JSON inválido, resposta sem fonte ou reprovada na verificação vira recusa. Se a LLM cair, a API responde 503 com os telefones de emergência.
 * A tela escreve tudo com `textContent`: nada do que o modelo devolve é interpretado como HTML.
@@ -294,7 +323,7 @@ Quando não consta: `"recusa": true`, `"fontes": []` e `"motivo"` igual a `abaix
 |---|---|
 | Finalidade e necessidade | o assistente não precisa saber quem é o morador; não há cadastro nem login |
 | Dados digitados por engano | CPF, CNPJ, RG, telefone, e-mail e CEP são trocados por marcadores **antes** da busca, da LLM e do log (`lgpd.py`) |
-| Compartilhamento | a pergunta não sai da infraestrutura do produto: LLM e embeddings são locais |
+| Compartilhamento | a pergunta não sai da infraestrutura do produto: LLM e embeddings são locais. Na URL pública, o túnel só encaminha a conexão HTTPS, que termina na máquina onde a API roda |
 | Registro | o log guarda a pergunta já mascarada, a decisão e as fontes; não guarda IP nem identificador (o log de acesso do servidor fica desligado, `--no-access-log`). A pasta `logs/` não vai para o Git |
 | Transparência | a tela avisa o que acontece com os dados e que a resposta é informativa |
 | Base de conhecimento | só documentos públicos de órgãos oficiais; nenhum dado pessoal. O mapa consumido é a view `ouro_vw_mapa_cidadao`, que o componente Dados publica sem dado pessoal |
