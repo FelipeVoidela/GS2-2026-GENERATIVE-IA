@@ -141,7 +141,8 @@ async def llm_fora(_: Request, erro: llm.ErroLLM) -> JSONResponse:
 
 @app.get("/", include_in_schema=False)
 def pagina() -> FileResponse:
-    return FileResponse(config.RAIZ / "web" / "index.html")
+    # no-cache: o navegador confere o ETag a cada visita, para não mostrar uma versão antiga da tela
+    return FileResponse(config.RAIZ / "web" / "index.html", headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/saude")

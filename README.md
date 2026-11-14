@@ -28,8 +28,10 @@ e recebe a orientação da Defesa Civil ou o artigo do decreto, com o link.
 
 | Item | Boca de Lobo |
 |---|---|
+| Nome do produto | Boca de Lobo |
 | Cidadão e território | Morador de bairro que alaga todo verão, principalmente em áreas baixas e periféricas de São Paulo |
 | Problema, em uma frase | Bueiro entupido + chuva forte = rua alagada, carro perdido e casa invadida, e ninguém avisa antes |
+| Proposta de valor | Saber antes da chuva quais bueiros estão entupidos em área de risco: a equipe de limpeza recebe a rota priorizada, e o morador sabe onde não passar e o que fazer |
 | O que a IA resolve | Na hora do alagamento o morador não sabe o que fazer, a quem pedir ajuda nem que direitos tem (saque do FGTS, isenção de IPTU, Cartão Emergencial). A informação existe, mas está espalhada em decretos e páginas de órgãos diferentes. A IA responde em linguagem simples, com a fonte, e avisa quando não sabe |
 | Tema do enunciado | Segurança (emergências por enchente) |
 | Componentes do produto | Robô (Maker Lab) · YOLO (Visão) · **assistente com RAG e agente (este repo)** · pipeline de dados (Big Data) · bot de alertas (RPA) · mapa público com observabilidade (DevOps) · modelo de negócio (BI) |
@@ -37,7 +39,19 @@ e recebe a orientação da Defesa Civil ou o artigo do decreto, com o link.
 | Modelos de IA | LLM `gemma3:4b` e embeddings `bge-m3`, os dois locais (Ollama, CPU). Nenhuma API paga, nenhum dado enviado a terceiros |
 | URL do MVP e repositório | Mapa do cidadão: https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/ · Este repositório: https://github.com/FelipeVoidela/GS2-2026-GENERATIVE-IA · Assistente no ar: https://pc-felipe.tail58a92a.ts.net:8443 (a LLM roda no computador da equipe; para rodar na sua máquina, `docker compose up`) |
 | Indicadores de impacto | Acerto e alucinação medidos em 56 perguntas de teste; recusa correta do que não consta; tempo de resposta |
-| ODS | 11 (cidades resilientes), 13 (adaptação ao clima), 3 (saúde) |
+| ODS | 11 (cidades resilientes), 13 (adaptação ao clima), 3 (saúde); a contribuição de cada um está logo abaixo |
+
+**Como o assistente contribui para os ODS**
+
+* **ODS 11, meta 11.5** (menos pessoas afetadas por desastres, inclusive os relacionados à água): o morador
+  recebe a orientação oficial do que fazer antes, durante e depois do alagamento e a situação dos bueiros do
+  bairro dele, a tempo de tirar o carro, proteger a casa e evitar a rua de risco.
+* **ODS 13, meta 13.1** (resiliência e adaptação a riscos do clima): chuvas fortes estão mais frequentes; o
+  assistente leva a quem mora em área que alaga a preparação recomendada pela Defesa Civil e os direitos que
+  ajudam a família a se recuperar (saque do FGTS, isenção de IPTU, Cartão Emergencial).
+* **ODS 3, meta 3.3** (combate a doenças transmitidas pela água): responde com as orientações do Ministério da
+  Saúde sobre água para beber, alimentos, leptospirose, tétano e animais peçonhentos depois da enchente, e
+  recusa em vez de arriscar um conselho de saúde errado.
 
 ## Resultado
 
@@ -336,6 +350,12 @@ Quando não consta: `"recusa": true`, `"fontes": []` e `"motivo"` igual a `abaix
 * **Fichas-resumo.** 9 das 22 fontes entram como resumo escrito pela equipe, porque a página não declara licença de reprodução. O resumo foi conferido com o original, mas não é o texto oficial.
 * **Juiz automático.** O acerto é medido por pontos-chave (expressões regulares). Ele não avalia redação e pode deixar passar um erro factual fora dos pontos; por isso o relatório traz também a leitura manual dos erros.
 * **Conjunto de teste pequeno.** 56 casos de teste: uma diferença de 2 pontos percentuais é um caso.
+* **A mesma pergunta pode sair diferente.** Mesmo com temperatura 0 e semente fixa, na API a resposta variou
+  conforme a pergunta feita logo antes. Em 14/11, em 6 tentativas no agente, "Tem bueiro entupido no Grajaú
+  hoje?" foi respondida 2 vezes e recusada 4: nessas, o modelo citou o telefone 156, que não estava nos trechos
+  entregues, a verificação reprovou e a segunda tentativa veio sem fonte (falha fechada). Outras duas perguntas
+  sobre o mapa foram respondidas em todas as tentativas (4 de cada uma), com pequenas diferenças de redação. O que
+  varia é responder ou recusar; nenhuma tentativa entregou número inventado. Por isso o placar usa as respostas gravadas.
 * **Atualização.** Leis mudam. O decreto do FGTS já teve quatro valores; a coleta precisa ser refeita periodicamente (`construir_base.py --atualizar`).
 
 ## Outros componentes do produto

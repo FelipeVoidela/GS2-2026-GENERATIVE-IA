@@ -35,7 +35,15 @@ conferido nos notebooks (com as saídas salvas) e nas respostas gravadas em `ava
 | Modelos de IA | LLM `gemma3:4b` (Google, 4 bilhões de parâmetros, quantizada em 4 bits) e embeddings `bge-m3` (BAAI, multilíngue), os dois rodando localmente pelo Ollama, em CPU |
 | URL do MVP e repositório | Mapa do cidadão: https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/ · Assistente no ar: https://pc-felipe.tail58a92a.ts.net:8443 · Repositório deste componente: https://github.com/FelipeVoidela/GS2-2026-GENERATIVE-IA |
 | Indicadores de impacto | Acerto e taxa de alucinação nas 56 perguntas de teste; recusa correta do que não consta; tempo de resposta |
-| ODS | 11 (cidades resilientes), 13 (adaptação ao clima), 3 (saúde) |
+| ODS | 11 (cidades resilientes), 13 (adaptação ao clima), 3 (saúde); a contribuição de cada um está logo abaixo |
+
+### Como o assistente contribui para os ODS
+
+| ODS e meta | Contribuição deste componente | Como aparece na avaliação |
+|---|---|---|
+| **11**, meta 11.5: menos pessoas afetadas por desastres, inclusive os relacionados à água | O morador recebe a orientação oficial do que fazer antes, durante e depois do alagamento e a situação dos bueiros do bairro dele, a tempo de tirar o carro, proteger a casa e evitar a rua de risco | Categorias "orientação", "alertas e serviços" e "produto (mapa)": 26 das 56 perguntas de teste |
+| **13**, meta 13.1: resiliência e adaptação a riscos do clima | Leva a quem mora em área que alaga a preparação recomendada pela Defesa Civil e os direitos que ajudam a família a se recuperar (saque do FGTS, isenção de IPTU, Cartão Emergencial) | Categoria "direitos": 12 perguntas, 91,7% de acerto com a base contra 16,7% sem ela |
+| **3**, meta 3.3: combate a doenças transmitidas pela água | Responde com as orientações do Ministério da Saúde sobre água para beber, alimentos, leptospirose, tétano e animais peçonhentos depois da enchente, e recusa em vez de arriscar um conselho de saúde errado | Perguntas de saúde dentro de "orientação"; o modelo sem base chegou a mandar ligar uma geladeira que ficou na água |
 
 ### A tarefa da IA
 
@@ -278,6 +286,14 @@ visíveis enquanto a resposta é gerada.
 
 * São 56 casos de teste: cada caso vale 1,8 ponto. A distância entre o modelo sem contexto e os outros dois é
   grande demais para ser acaso; a distância entre RAG e agente (5 acertos, 1 erro) deve ser lida como tendência.
+* Cada pergunta foi respondida uma vez. Mesmo com temperatura 0 e semente fixa, na API a resposta variou
+  conforme a pergunta feita logo antes: em 14/11, em 6 tentativas no agente, "Tem bueiro entupido no Grajaú
+  hoje?" (caso P01, da partição dev) foi respondida 2 vezes e recusada 4, porque o modelo citou o telefone 156
+  sem ele estar nos trechos entregues, a verificação reprovou e a segunda tentativa veio sem fonte. Outras duas
+  perguntas sobre o mapa (casos P02 e P06) foram respondidas em todas as tentativas (4 de cada uma), com pequenas
+  diferenças de redação. A variação observada foi
+  entre responder e recusar, nunca um número inventado entregue ao morador; medir essa variação no conjunto todo
+  (cada caso rodado várias vezes) fica como próximo passo.
 * O juiz é automático (pontos-chave por expressão regular) e foi auditado: as respostas foram lidas uma a uma,
   9 padrões foram corrigidos e um caso teve o gabarito trocado porque o agente estava certo. Cada ajuste está
   em `avaliacao/AUDITORIA.md`, com quem ele favoreceu. O juiz continua sem ver erro fora dos pontos-chave, o
