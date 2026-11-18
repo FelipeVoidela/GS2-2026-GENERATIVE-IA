@@ -6,7 +6,7 @@
 # Na primeira vez o serviço "modelos" baixa cerca de 4,5 GB (gemma3:4b e bge-m3).
 services:
   ollama:
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.40.16
     volumes:
       - ollama:/root/.ollama
     environment:
@@ -20,7 +20,7 @@ services:
       retries: 12
 
   modelos:
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.40.16
     depends_on:
       ollama:
         condition: service_healthy

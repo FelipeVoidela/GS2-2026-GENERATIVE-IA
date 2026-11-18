@@ -4,7 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/app/src
 WORKDIR /app
 
 # só o que a API precisa em produção (sem Jupyter e sem as bibliotecas de coleta)
-RUN pip install --no-cache-dir "numpy>=1.26" "requests>=2.31" "fastapi>=0.110" "uvicorn[standard]>=0.29" "pydantic>=2.6"
+RUN pip install --no-cache-dir "numpy==2.4.6" "requests==2.34.2" "fastapi==0.162.4" "uvicorn[standard]==0.54.0" "pydantic==2.14.3"
 
 COPY src ./src
 COPY base/fontes.json base/trechos.jsonl ./base/

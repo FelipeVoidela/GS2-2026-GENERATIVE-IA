@@ -451,4 +451,5 @@ documentos) e testar com moradores se a resposta é entendida.
 | Placar e auditoria | [avaliacao/placar.md](avaliacao/placar.md) · [avaliacao/AUDITORIA.md](avaliacao/AUDITORIA.md) |
 | Como reproduzir | [README.md](README.md) |
 | Componente Dados (Big Data) | https://github.com/FelipeVoidela/GS2-2026-Big-Data-Architecture |
+| Componente Visão (Applied Computer Vision) | https://github.com/FelipeVoidela/GS2-2026-Applied-Computer-Vision |
 | Mapa do cidadão (MVP) | https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/ |

@@ -171,7 +171,7 @@ Na primeira vez os modelos são baixados (4,5 GB). Depois, abra http://localhost
 **1. LLM local.** Suba o Ollama e baixe os dois modelos:
 
 ```bash
-docker run -d --name gs-ollama -p 127.0.0.1:11434:11434 -v gs_ollama:/root/.ollama ollama/ollama
+docker run -d --name gs-ollama -p 127.0.0.1:11434:11434 -v gs_ollama:/root/.ollama ollama/ollama:0.40.16
 ```
 
 ```bash
@@ -255,9 +255,11 @@ O endereço fica `https://<máquina>.<rede>.ts.net:8443` e volta sozinho quando 
 tailscale funnel --https=8443 off
 ```
 
-A geração usa temperatura 0 e semente fixa (42). Mesmo assim, versões diferentes do Ollama ou do
-processador podem mudar uma ou outra resposta; por isso as respostas usadas no placar estão gravadas
-em `avaliacao/resultados/`.
+A geração usa temperatura 0 e semente fixa (42), e as versões estão fixas: bibliotecas Python em
+`requirements.txt` (as mesmas no `Dockerfile` e no workflow de testes) e Ollama 0.40.16 no
+`docker-compose.yaml`. Mesmo assim, outro processador ou uma nova publicação do modelo `gemma3:4b`
+podem mudar uma ou outra resposta; por isso as respostas usadas no placar estão gravadas em
+`avaliacao/resultados/`.
 
 ## API
 
@@ -356,9 +358,19 @@ Quando não consta: `"recusa": true`, `"fontes": []` e `"motivo"` igual a `abaix
   entregues, a verificação reprovou e a segunda tentativa veio sem fonte (falha fechada). Outras duas perguntas
   sobre o mapa foram respondidas em todas as tentativas (4 de cada uma), com pequenas diferenças de redação. O que
   varia é responder ou recusar; nenhuma tentativa entregou número inventado. Por isso o placar usa as respostas gravadas.
+* **Resposta que mistura fontes.** Em 18/11, na API, "Como eu trato a água pra beber depois da enchente?" saiu
+  como "ferva a água por 10 minutos" nas duas tentativas no agente. Nenhuma fonte diz isso: o folder da Secretaria
+  Municipal da Saúde manda ferver, pingar o hipoclorito e **esperar** 10 minutos; o Ministério da Saúde manda
+  esperar 30. A verificação aprovou porque o número existe no trecho (a mesma causa do erro 3 do relatório: ela
+  confere se o número está nos trechos, não a que ele se refere). O exemplo da tela passou a ser a pergunta das
+  gotas de hipoclorito, respondida certo em 3 de 3 tentativas.
+* **O mapa é uma fotografia.** A ferramenta do mapa lê o export que o componente Dados publica; o arquivo atual
+  é de 08/11/2026. A data do dado vai no trecho citado na resposta ("Dados do mapa do Boca de Lobo gerados em...")
+  e em `passos` (`dados_de`), mas o texto da resposta nem sempre a repete.
 * **Atualização.** Leis mudam. O decreto do FGTS já teve quatro valores; a coleta precisa ser refeita periodicamente (`construir_base.py --atualizar`).
 
 ## Outros componentes do produto
 
 * Dados (Big Data Architecture): https://github.com/FelipeVoidela/GS2-2026-Big-Data-Architecture
+* Visão (Applied Computer Vision): https://github.com/FelipeVoidela/GS2-2026-Applied-Computer-Vision
 * Mapa do cidadão (MVP): https://felipevoidela.github.io/GS2-2026-Big-Data-Architecture/
