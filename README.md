@@ -14,6 +14,8 @@ e recebe a orientação da Defesa Civil ou o artigo do decreto, com o link.
 
 **Assistente no ar: https://pc-felipe.tail58a92a.ts.net:8443** (detalhes em [Assistente no ar](#assistente-no-ar))
 
+**Vídeo: https://www.youtube.com/watch?v=c0afZJsIye8&t=83s** (vídeo pitch da equipe; a demonstração do assistente vai de 1:23 a 1:57)
+
 ## Integrantes
 
 | Nome completo | RM |

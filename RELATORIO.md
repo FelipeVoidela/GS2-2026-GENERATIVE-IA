@@ -446,7 +446,7 @@ documentos) e testar com moradores se a resposta é entendida.
 |---|---|
 | Repositório deste componente | https://github.com/FelipeVoidela/GS2-2026-GENERATIVE-IA |
 | Assistente no ar | https://pc-felipe.tail58a92a.ts.net:8443 (roda no computador da equipe, com a LLM local; de 20 segundos a 2 minutos por resposta) |
-| Vídeo | **a incluir pela equipe antes da entrega** |
+| Vídeo | https://www.youtube.com/watch?v=c0afZJsIye8&t=83s (vídeo pitch da equipe, 4min32; a demonstração do assistente vai de 1:23 a 1:57) |
 | Notebooks (com saídas) | [01 base](notebooks/01_base_conhecimento.ipynb) · [02 busca](notebooks/02_busca_recall_limiar.ipynb) · [03 geração](notebooks/03_geracao_rag.ipynb) · [04 agente](notebooks/04_agente.ipynb) · [05 placar e erros](notebooks/05_placar_e_erros.ipynb) |
 | Placar e auditoria | [avaliacao/placar.md](avaliacao/placar.md) · [avaliacao/AUDITORIA.md](avaliacao/AUDITORIA.md) |
 | Como reproduzir | [README.md](README.md) |
